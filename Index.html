@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kartik's Birthday Celebration</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <!-- Tailwind Custom Theme Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            deepBurgundy: '#2B0E1B',
+            burgundyDark: '#1B0811',
+            dustyRose: '#D4A5B2',
+            roseHighlight: '#F8B4C4',
+            softCream: '#FAF5EF',
+          },
+          fontFamily: {
+            serif: ['Georgia', 'Cambria', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background: radial-gradient(circle at top, #3b1425 0%, #1a0812 100%);
+      min-height: 100vh;
+    }
+    .glass-card {
+      background: rgba(43, 14, 27, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+  </style>
+</head>
+<body class="text-softCream flex items-center justify-center p-4 min-h-screen">
+
+  <main class="w-full max-w-lg mx-auto" id="bdayContainer">
+    <!-- Dynamic content injected by JavaScript -->
+  </main>
+
+  <script>
+    function renderBirthdayPage() {
+      const bdayContainer = document.getElementById('bdayContainer');
+      const now = new Date();
+      const currentYear = now.getFullYear();
+
+      // Kartik's birthday is October 24 (Month index 9 in JS)
+      let bdayDate = new Date(currentYear, 9, 24, 0, 0, 0);
+
+      // If Oct 24 has already passed for this year, target next year's countdown
+      if (now > new Date(currentYear, 9, 24, 23, 59, 59)) {
+        bdayDate = new Date(currentYear + 1, 9, 24, 0, 0, 0);
+      }
+
+      const isTodayBirthday = 
+        now.getMonth() === 9 && now.getDate() === 24;
+
+      if (isTodayBirthday) {
+        // --- 1. BIRTHDAY LETTER VIEW (UNLOCKED ON OCT 24) ---
+        bdayContainer.innerHTML = `
+          <div class="glass-card p-6 sm:p-10 rounded-3xl border border-dustyRose/40 text-center animate-fade-in relative overflow-hidden">
+            <div class="w-16 h-16 mx-auto rounded-full bg-deepBurgundy text-roseHighlight flex items-center justify-center mb-4 shadow-lg border border-dustyRose/30">
+              <i data-lucide="cake" class="w-8 h-8"></i>
+            </div>
+
+            <p class="text-xs uppercase tracking-widest text-dustyRose font-sans font-semibold mb-1">A Special Day</p>
+            <h1 class="font-serif text-3xl sm:text-4xl text-roseHighlight font-bold mb-4">Happy Birthday, Kartik!</h1>
+
+            <div class="space-y-4 text-left font-serif text-softCream/90 leading-relaxed text-sm sm:text-base border-t border-b border-dustyRose/20 py-6 my-6">
+              <p>Dear Kartik,</p>
+              <p>
+                Wishing you a very special birthday filled with happiness, peace, and unforgettable moments. 
+                May this year bring you closer to all your aspirations and shower you with endless opportunities.
+              </p>
+              <p>
+                Thank you for bringing your unique energy and warmth into our lives. Have the most wonderful celebration today!
+              </p>
+              <p class="pt-2 italic text-right text-dustyRose text-xs sm:text-sm">— With heartfelt wishes</p>
+            </div>
+
+            <button onclick="launchConfetti()" class="inline-flex items-center gap-2 bg-roseHighlight text-deepBurgundy font-sans font-semibold px-6 py-3 rounded-2xl hover:opacity-90 transition active:scale-95 shadow-md">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              Celebrate Together
+            </button>
+          </div>
+        `;
+
+        // Launch celebratory confetti immediately
+        launchConfetti();
+      } else {
+        // --- 2. COUNTDOWN VIEW (BEFORE OCT 24) ---
+        const diffMs = bdayDate - now;
+        const daysLeft = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        const hoursLeft = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
+        const minsLeft = Math.floor((diffMs / (1000 * 60)) % 60);
+
+        bdayContainer.innerHTML = `
+          <div class="glass-card p-6 sm:p-8 rounded-3xl border border-dustyRose/30 text-center max-w-md mx-auto">
+            <div class="w-12 h-12 mx-auto rounded-full bg-deepBurgundy text-roseHighlight flex items-center justify-center mb-3 border border-dustyRose/20">
+              <i data-lucide="gift" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-serif text-2xl text-softCream mb-1">Kartik's Birthday Countdown</h3>
+            <p class="text-xs text-dustyRose/80 font-sans mb-5">Celebrating on 24 October</p>
+
+            <div class="flex justify-center gap-3 sm:gap-4">
+              <div class="bg-deepBurgundy/90 px-4 py-3 rounded-2xl border border-dustyRose/20 min-w-[70px]">
+                <span class="block font-serif text-2xl font-bold text-roseHighlight">${daysLeft}</span>
+                <span class="text-[10px] uppercase font-sans text-dustyRose">Days</span>
+              </div>
+              <div class="bg-deepBurgundy/90 px-4 py-3 rounded-2xl border border-dustyRose/20 min-w-[70px]">
+                <span class="block font-serif text-2xl font-bold text-softCream">${hoursLeft}</span>
+                <span class="text-[10px] uppercase font-sans text-dustyRose">Hours</span>
+              </div>
+              <div class="bg-deepBurgundy/90 px-4 py-3 rounded-2xl border border-dustyRose/20 min-w-[70px]">
+                <span class="block font-serif text-2xl font-bold text-softCream">${minsLeft}</span>
+                <span class="text-[10px] uppercase font-sans text-dustyRose">Mins</span>
+              </div>
+            </div>
+
+            <p class="text-[11px] text-dustyRose/70 font-serif italic mt-5">
+              On 24 October, this card automatically transforms into your full birthday celebration letter!
+            </p>
+          </div>
+        `;
+      }
+
+      // Re-initialize Lucide Icons whenever markup renders
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
+
+    function launchConfetti() {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#D4A5B2', '#F8B4C4', '#FAF5EF', '#FFD166']
+        });
+      }
+    }
+
+    renderBirthdayPage();
+    setInterval(renderBirthdayPage, 60000); // Refresh countdown every minute
+  </script>
+</body>
+</html>
